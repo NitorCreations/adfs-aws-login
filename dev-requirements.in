@@ -1,0 +1,9 @@
+flake8==3.7.7
+pip-tools==4.0.0
+pytest==4.6.5
+pytest-cov==2.7.1
+requests-mock==1.6.0
+pytest-mock==1.10.4
+coveralls==1.8.2
+mock==3.0.5
+bumpversion==0.5.3

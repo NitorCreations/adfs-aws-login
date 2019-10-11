@@ -1,0 +1,11 @@
+- name: ci
+  type: parallel
+  steps:
+  - service: adfs-aws-login-p37
+    command: pytest --cov=login
+  - service: adfs-aws-login-p36
+    command: pytest --cov=login
+  - service: adfs-aws-login-p35
+    command: pytest --cov=login
+  - service: adfs-aws-login-p27
+    command: pytest --cov=login

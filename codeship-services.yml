@@ -1,0 +1,16 @@
+adfs-aws-login-p37:
+  build:
+    image: adfs-aws-login-p37
+    dockerfile: p37.Dockerfile
+adfs-aws-login-p36:
+  build:
+    image: adfs-aws-login-p36
+    dockerfile: p36.Dockerfile
+adfs-aws-login-p35:
+  build:
+    image: adfs-aws-login-p35
+    dockerfile: p35.Dockerfile
+adfs-aws-login-p27:
+  build:
+    image: adfs-aws-login-p27
+    dockerfile: p27.Dockerfile
