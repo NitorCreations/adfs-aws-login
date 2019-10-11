@@ -51,8 +51,8 @@ def _parse_args():
     parser.add_argument('-p', '--profile', type=str, nargs='?', default=getenv('AWS_PROFILE', 'default'),
                         help='AWS profile name to log in with')
     parser.add_argument('-u', '--user', type=str, nargs='?', default=getenv('ADFS_USER', ''),
-                        help='AWS profile name to log in with')
-    parser.add_argument('-n', '--no-prompt', action="store_true", help="Do not prompt for username and AWS role")
+                        help='Username to log in with')
+    parser.add_argument('-n', '--no-prompt', action="store_true", help="Do not prompt for username and AWS role (need to be set in config in this case)")
     return parser.parse_args()
 
 

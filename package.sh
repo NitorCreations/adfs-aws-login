@@ -7,4 +7,4 @@ rm -rf dist/
 python setup.py sdist bdist_wheel --universal
  
 # Sign the distributions
-#gpg --detach-sign -a dist/*
+gpg --detach-sign -a dist/*
