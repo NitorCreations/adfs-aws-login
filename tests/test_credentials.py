@@ -91,4 +91,4 @@ def aws_config_write_patched(mocker):
 
 @pytest.fixture
 def aws_file_open(mocker):
-    return mocker.patch('login.credentials.open', mocker.mock_open())
+    return mocker.patch('adfs_aws_login.credentials.open', mocker.mock_open())
