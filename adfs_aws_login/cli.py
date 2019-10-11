@@ -43,7 +43,6 @@ def adfs_aws_login():
     # Programmatically get the SAML assertion
     # Opens the initial IdP url and follows all of the HTTP302 redirects, and
     # gets the resulting login page
-    print(conf.ADFS_LOGIN_URL)
     formresponse = session.get(conf.ADFS_LOGIN_URL, verify=True)
     # Capture the idpauthformsubmiturl, which is the final url after all the 302s
     idpauthformsubmiturl = formresponse.url
