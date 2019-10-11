@@ -4,7 +4,6 @@
 #
 #    pip-compile setup.py
 #
-backports.functools-lru-cache==1.5  # via soupsieve
 beautifulsoup4==4.8.1
 boto3==1.9.247            # via threadlocal-aws
 botocore==1.12.247        # via boto3, s3transfer

@@ -22,7 +22,6 @@ entrypoints==0.3          # via flake8
 enum34==1.1.6             # via cryptography, flake8
 flake8==3.7.7
 funcsigs==1.0.2           # via mock, pytest
-functools32==3.2.3.post2  # via flake8
 idna==2.8                 # via requests, urllib3
 importlib-metadata==0.23  # via pluggy, pytest
 ipaddress==1.0.22         # via cryptography, urllib3
