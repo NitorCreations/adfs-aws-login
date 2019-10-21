@@ -26,7 +26,8 @@ setup(name='adfs-aws-login',
       install_requires=[
           'requests==2.22.0',
           'threadlocal-aws==0.6',
-          'beautifulsoup4==4.8.1'],
+          'beautifulsoup4==4.8.1',
+          'lxml==4.4.1'],
       tests_require=[
           'pytest==4.6.5',
           'pytest-mock==1.10.4',
