@@ -7,7 +7,7 @@ with open(dir_path + '/README.md', 'r') as f:
     README = ''.join(f.readlines())
 
 setup(name='adfs-aws-login',
-      version='0.1.3',
+      version='0.1.4',
       description='CLI login to AWS using ADFS',
       long_description=README,
       long_description_content_type='text/markdown',
