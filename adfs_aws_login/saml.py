@@ -14,6 +14,16 @@ except ImportError:
     from urlparse import urlparse   # noqa: F401
 
 
+def _to_str(data):
+    ret = data
+    decode_method = getattr(data, "decode", None)
+    if callable(decode_method):
+        try:
+            ret = data.decode()
+        except:
+            ret = _to_str(base64.b64encode(data))
+    return str(ret)
+
 class SamlException(Exception):
      pass
 
@@ -30,7 +40,7 @@ def get_saml_assertion(username, password):
 
     # Parse the response and extract all the necessary values
     # in order to build a dictionary of all of the form values the IdP expects
-    formsoup = BeautifulSoup(formresponse.text.decode('utf8'),"lxml")
+    formsoup = BeautifulSoup(_to_str(formresponse.text),"lxml")
     payload = {}
 
     for inputtag in formsoup.find_all(re.compile('(INPUT|input)')):
@@ -72,7 +82,7 @@ def get_saml_assertion(username, password):
     del password
 
     # Decode the response and extract the SAML assertion
-    soup = BeautifulSoup(response.text.decode('utf8'),"lxml")
+    soup = BeautifulSoup(_to_str(response.text),"lxml")
     assertion = ''
 
     # Look for the SAMLResponse attribute of the input tag (determined by
