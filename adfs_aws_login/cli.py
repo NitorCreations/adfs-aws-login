@@ -67,7 +67,7 @@ def adfs_aws_login():
     if not role_arn:
         print("No valid role found in assertions")
         sys.exit(3)
-
     # Use the assertion to get an AWS STS token using Assume Role with SAML
-    token = sts().assume_role_with_saml(RoleArn=role_arn, PrincipalArn=principal_arn, SAMLAssertion=assertion)
+    token = sts().assume_role_with_saml(RoleArn=role_arn, PrincipalArn=principal_arn,
+                                        SAMLAssertion=assertion, DurationSeconds=conf.DURATION)
     credentials.write(token)
