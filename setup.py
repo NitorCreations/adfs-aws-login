@@ -3,13 +3,14 @@ from setuptools import setup
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-with open(dir_path + '/README.md', 'r') as f:
-    README = ''.join(f.readlines())
+
+with open('README.md') as f:
+    long_description = f.read()
 
 setup(name='adfs-aws-login',
       version='0.1.6',
       description='CLI login to AWS using ADFS',
-      long_description=README,
+      long_description=long_description,
       long_description_content_type='text/markdown',
       url='http://github.com/NitorCreations/adfs-aws-login',
       download_url='https://github.com/NitorCreations/adfs-aws-login',
