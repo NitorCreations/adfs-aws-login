@@ -17,11 +17,12 @@ See `adfs-aws-login -h` for more options.
 ## Configure
 
 Configure the profiles in `$HOME/.aws/config`. Following is an example with all supported configuration keys (and a few aws default ones):
-```ini
+```
 [profile example]
 region=us-east-1
 output=json
 adfs_login_url=https://login.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices
 adfs_default_username=test.user@example.com
 adfs_role_arn=arn:aws:iam::1234567890:role/DeployRole
+adfs_session_duration=8
 ```
