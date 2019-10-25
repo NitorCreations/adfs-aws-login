@@ -11,7 +11,8 @@ except ImportError:
 
 args = {'profile': 'test-profile',
         'user': 'test@example.com',
-        'no_prompt': False}
+        'no_prompt': False,
+        'duration': None}
 
 params = {"adfs_role_arn": "arn:aws:iam::123456789012:role/test_role",
           "adfs_login_url": "https://testauthority",
