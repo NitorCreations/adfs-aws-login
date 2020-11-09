@@ -1,4 +1,4 @@
-import adfs_aws_login.conf as config
+from adfs_aws_login import conf
 import pytest
 import argparse
 
@@ -12,7 +12,8 @@ except ImportError:
 args = {'profile': 'test-profile',
         'user': 'test@example.com',
         'no_prompt': False,
-        'duration': None}
+        'duration': None,
+        'role': None}
 
 params = {"adfs_role_arn": "arn:aws:iam::123456789012:role/test_role",
           "adfs_login_url": "https://testauthority",
@@ -23,14 +24,14 @@ sections = {"profile test-profile": params}
 
 def test_init_no_profile_found(args_patched):
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        config.init()
+        config = conf.init()
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
     assert args_patched.call_count == 1
 
 
 def test_init(args_patched, aws_config_patched):
-    config.init()
+    config = conf.init()
     for mock in aws_config_patched:
         mock.call_count == 1
     args_patched.call_count == 1
@@ -39,7 +40,7 @@ def test_init(args_patched, aws_config_patched):
 
 def test_init_missing_login_url(args_patched, aws_config_patched_without_login_url):
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        config.init()
+        config = conf.init()
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
     for mock in aws_config_patched_without_login_url:
@@ -48,6 +49,7 @@ def test_init_missing_login_url(args_patched, aws_config_patched_without_login_u
 
 
 def _verify_config(args, params):
+    config = conf.init()
     assert config.PROFILE == args['profile']
     assert config.CONFIG_PROFILE == 'profile {}'.format(args['profile'])
     assert config.ROLE_ARN == params['adfs_role_arn']

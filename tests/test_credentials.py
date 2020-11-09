@@ -21,9 +21,7 @@ test_profile = "test_write"
 def test_new_profile(aws_config_read_patched, aws_config_write_patched,
                      aws_config_add_section_patched, aws_config_set_patched, aws_config_has_section_patched,
                      aws_file_open):
-    config.PROFILE = test_profile
-
-    credentials.write(assume_role_response)
+    credentials.write(assume_role_response, test_profile)
 
     _verify(aws_config_read_patched, aws_config_write_patched,
             aws_config_add_section_patched, aws_config_set_patched, aws_config_not_has_section_patched,
@@ -34,9 +32,7 @@ def test_new_profile(aws_config_read_patched, aws_config_write_patched,
 def test_update_profile(aws_config_read_patched, aws_config_write_patched,
                         aws_config_add_section_patched, aws_config_set_patched, aws_config_not_has_section_patched,
                         aws_file_open):
-    config.PROFILE = test_profile
-
-    credentials.write(assume_role_response)
+    credentials.write(assume_role_response, test_profile)
 
     _verify(aws_config_read_patched, aws_config_write_patched,
             aws_config_add_section_patched, aws_config_set_patched, aws_config_not_has_section_patched,
@@ -49,13 +45,13 @@ def _verify(aws_config_read_patched, aws_config_write_patched,
             aws_file_open):
     assert aws_config_write_patched.call_count == 1
     assert aws_config_read_patched.call_count == 1
-    aws_config_set_patched.assert_any_call(config.PROFILE, 'aws_access_key_id',
+    aws_config_set_patched.assert_any_call(test_profile, 'aws_access_key_id',
                                            assume_role_response['Credentials']['AccessKeyId'])
-    aws_config_set_patched.assert_any_call(config.PROFILE, 'aws_session_expiration',
+    aws_config_set_patched.assert_any_call(test_profile, 'aws_session_expiration',
                                            assume_role_response['Credentials']['Expiration'].isoformat())
-    aws_config_set_patched.assert_any_call(config.PROFILE, 'aws_session_token',
+    aws_config_set_patched.assert_any_call(test_profile, 'aws_session_token',
                                            assume_role_response['Credentials']['SessionToken'])
-    aws_config_set_patched.assert_any_call(config.PROFILE, 'aws_secret_access_key',
+    aws_config_set_patched.assert_any_call(test_profile, 'aws_secret_access_key',
                                            assume_role_response['Credentials']['SecretAccessKey'])
 
 
