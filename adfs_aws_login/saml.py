@@ -27,7 +27,7 @@ def _to_str(data):
 class SamlException(Exception):
      pass
 
-def get_saml_assertion(username, password):
+def get_saml_assertion(username, password, conf):
     # Initiate session handler
     session = requests.Session()
 

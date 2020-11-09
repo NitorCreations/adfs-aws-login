@@ -1,6 +1,7 @@
 import sys
 from getpass import getpass
-from adfs_aws_login import conf, credentials, saml
+from adfs_aws_login import credentials, saml
+from adfs_aws_login.conf import init
 from threadlocal_aws import region
 from threadlocal_aws.clients import sts
 
@@ -10,8 +11,8 @@ except NameError:
     pass
 
 def adfs_aws_login():
-    conf.init()
-
+    conf = init()
+    username = None
     # Get the federated credentials from the user
     if not conf.NO_PROMPT:
         sys.stdout.write("Username [" + conf.DEFAULT_USERNAME + "]: ")
@@ -25,7 +26,7 @@ def adfs_aws_login():
     password = getpass()
 
     try:
-        assertion, awsroles = saml.get_saml_assertion(username, password)
+        assertion, awsroles = saml.get_saml_assertion(username, password, conf)
     except saml.SamlException as e:
         print(e.message)
         sys.exit(1)
@@ -62,7 +63,7 @@ def adfs_aws_login():
         for awsrole in awsroles:
             if awsrole.startswith(conf.ROLE_ARN + ","):
                 role_arn = conf.ROLE_ARN
-                principal_arn = awsroles.split(',')[1]
+                principal_arn = awsrole.split(',')[1]
     
     if not role_arn:
         print("No valid role found in assertions")
@@ -70,4 +71,4 @@ def adfs_aws_login():
     # Use the assertion to get an AWS STS token using Assume Role with SAML
     token = sts().assume_role_with_saml(RoleArn=role_arn, PrincipalArn=principal_arn,
                                         SAMLAssertion=assertion, DurationSeconds=conf.DURATION)
-    credentials.write(token)
+    credentials.write(token, conf.PROFILE)
