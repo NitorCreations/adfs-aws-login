@@ -26,7 +26,8 @@ def adfs_aws_login():
             sys.exit(1)
     if "ADFS_DEFAULT_PASSWORD" in environ and environ["ADFS_DEFAULT_PASSWORD"]:
         password = environ["ADFS_DEFAULT_PASSWORD"]
-    password = getpass()
+    else:
+        password = getpass()
 
     try:
         assertion, awsroles = saml.get_saml_assertion(username, password, conf)
