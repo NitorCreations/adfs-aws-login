@@ -1,4 +1,5 @@
 import sys
+from os import environ
 from getpass import getpass
 from adfs_aws_login import credentials, saml
 from adfs_aws_login.conf import init
@@ -23,6 +24,8 @@ def adfs_aws_login():
         else:
             print("Need to give username")
             sys.exit(1)
+    if "ADFS_DEFAULT_PASSWORD" in environ and environ["ADFS_DEFAULT_PASSWORD"]:
+        password = environ["ADFS_DEFAULT_PASSWORD"]
     password = getpass()
 
     try:

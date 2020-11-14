@@ -14,6 +14,8 @@ The executable is called `adfs-aws-login`. Log in with default profile by simply
 
 See `adfs-aws-login -h` for more options.
 
+If the environment variable `ADFS_DEFAULT_PASSWORD` is defined, that will be used as the password.
+
 ## Configure
 
 Configure the profiles in `$HOME/.aws/config`. Following is an example with all supported configuration keys (and a few aws default ones):
