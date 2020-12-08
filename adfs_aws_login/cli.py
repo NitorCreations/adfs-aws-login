@@ -33,7 +33,7 @@ def adfs_aws_login():
     try:
         assertion, awsroles = saml.get_saml_assertion(username, password, conf)
     except saml.SamlException as e:
-        print(e.message)
+        print(e)
         sys.exit(1)
 
     # Overwrite and delete the credential variables, just for safety
