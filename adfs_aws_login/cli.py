@@ -11,6 +11,7 @@ try:
 except NameError:
     pass
 
+
 def adfs_aws_login():
     conf = init()
     username = None
@@ -36,8 +37,8 @@ def adfs_aws_login():
         sys.exit(1)
 
     # Overwrite and delete the credential variables, just for safety
-    username = '##############################################'
-    password = '##############################################'
+    username = "##############################################"
+    password = "##############################################"
     del username
     del password
 
@@ -48,7 +49,7 @@ def adfs_aws_login():
             i = 0
             print("Please choose the role you would like to assume:")
             for awsrole in awsroles:
-                print('[', i, ']: ', awsrole.split(',')[0])
+                print("[", i, "]: ", awsrole.split(",")[0])
                 i += 1
             sys.stdout.write("Selection: ")
             selectedroleindex = input()
@@ -58,21 +59,25 @@ def adfs_aws_login():
                 print("You selected an invalid role index, please try again")
                 sys.exit(1)
 
-            role_arn = awsroles[int(selectedroleindex)].split(',')[0]
-            principal_arn = awsroles[int(selectedroleindex)].split(',')[1]
+            role_arn = awsroles[int(selectedroleindex)].split(",")[0]
+            principal_arn = awsroles[int(selectedroleindex)].split(",")[1]
         else:
-            role_arn = awsroles[0].split(',')[0]
-            principal_arn = awsroles[0].split(',')[1]
+            role_arn = awsroles[0].split(",")[0]
+            principal_arn = awsroles[0].split(",")[1]
     else:
         for awsrole in awsroles:
             if awsrole.startswith(conf.ROLE_ARN + ","):
                 role_arn = conf.ROLE_ARN
-                principal_arn = awsrole.split(',')[1]
-    
+                principal_arn = awsrole.split(",")[1]
+
     if not role_arn:
         print("No valid role found in assertions")
         sys.exit(3)
     # Use the assertion to get an AWS STS token using Assume Role with SAML
-    token = sts().assume_role_with_saml(RoleArn=role_arn, PrincipalArn=principal_arn,
-                                        SAMLAssertion=assertion, DurationSeconds=conf.DURATION)
+    token = sts().assume_role_with_saml(
+        RoleArn=role_arn,
+        PrincipalArn=principal_arn,
+        SAMLAssertion=assertion,
+        DurationSeconds=conf.DURATION,
+    )
     credentials.write(token, conf.PROFILE)
