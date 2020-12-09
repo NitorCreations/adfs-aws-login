@@ -41,37 +41,22 @@ def adfs_aws_login():
     password = "##############################################"
     del username
     del password
-
-    if not conf.NO_PROMPT:
-        # If I have more than one role, ask the user which one they want,
-        # otherwise just proceed
-        if len(awsroles) > 1:
-            i = 0
-            print("Please choose the role you would like to assume:")
-            for awsrole in awsroles:
-                print("[", i, "]: ", awsrole.split(",")[0])
-                i += 1
-            sys.stdout.write("Selection: ")
-            selectedroleindex = input()
-
-            # Basic sanity check of input
-            if int(selectedroleindex) > (len(awsroles) - 1):
-                print("You selected an invalid role index, please try again")
-                sys.exit(1)
-
-            role_arn = awsroles[int(selectedroleindex)].split(",")[0]
-            principal_arn = awsroles[int(selectedroleindex)].split(",")[1]
-        else:
-            role_arn = awsroles[0].split(",")[0]
-            principal_arn = awsroles[0].split(",")[1]
-    else:
+    role_arn = None
+    if conf.NO_PROMPT and conf.ROLE_ARN:
         for awsrole in awsroles:
             if awsrole.startswith(conf.ROLE_ARN + ","):
                 role_arn = conf.ROLE_ARN
                 principal_arn = awsrole.split(",")[1]
+        if not role_arn:
+           role_arn, principal_arn = select_role(awsroles)
+    else:
+        # If I have more than one role, ask the user which one they want,
+        # otherwise just proceed
+       role_arn, principal_arn = select_role(awsroles)
 
     if not role_arn:
         print("No valid role found in assertions")
+        print(awsroles)
         sys.exit(3)
     # Use the assertion to get an AWS STS token using Assume Role with SAML
     token = sts().assume_role_with_saml(
@@ -81,3 +66,27 @@ def adfs_aws_login():
         DurationSeconds=conf.DURATION,
     )
     credentials.write(token, conf.PROFILE)
+
+def select_role(awsroles):
+    role_arn = None
+    principal_arn = None
+    if len(awsroles) > 1:
+        i = 0
+        print("Please choose the role you would like to assume:")
+        for awsrole in awsroles:
+            print("[", i, "]: ", awsrole.split(",")[0])
+            i += 1
+        sys.stdout.write("Selection: ")
+        selectedroleindex = input()
+
+        # Basic sanity check of input
+        if int(selectedroleindex) > (len(awsroles) - 1):
+            print("You selected an invalid role index, please try again")
+            sys.exit(1)
+
+        role_arn = awsroles[int(selectedroleindex)].split(",")[0]
+        principal_arn = awsroles[int(selectedroleindex)].split(",")[1]
+    elif awsroles:
+        role_arn = awsroles[0].split(",")[0]
+        principal_arn = awsroles[0].split(",")[1]
+    return role_arn, principal_arn
