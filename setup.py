@@ -26,9 +26,9 @@ setup(
     },
     setup_requires=["pytest-runner"],
     install_requires=[
-        "requests==2.22.0",
+        "requests>=2.22.0",
         "threadlocal-aws==0.8",
-        "beautifulsoup4==4.8.1",
+        "beautifulsoup4>=4.8.1",
         "lxml",
     ],
     tests_require=[
