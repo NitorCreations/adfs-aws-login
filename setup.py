@@ -38,7 +38,7 @@ setup(
         "requests-mock==1.6.0",
         "pytest-runner",
         "mock==3.0.5",
-        "cryptography==3.2.1",
+        "cryptography==3.3.2",
     ],
     test_suite="tests",
 )
