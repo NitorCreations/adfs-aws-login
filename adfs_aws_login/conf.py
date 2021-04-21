@@ -91,16 +91,18 @@ class Config:
                 "Couldn't find configuration for profile: {}".format(self.PROFILE)
             )
 
-        config_section = aws_config[self.CONFIG_PROFILE]
-        self.ADFS_LOGIN_URL = config_section.get("adfs_login_url", None)
+        default_section = config_section = aws_config[self.CONFIG_PROFILE]
+        if aws_config.has_section("default"):
+            default_section = aws_config["default"]
+        self.ADFS_LOGIN_URL = config_section.get("adfs_login_url", default_section.get("adfs_login_url", None))
         if self.ADFS_LOGIN_URL is None:
             raise ConfigExeption(_fail_message("adfs_login_url", self.PROFILE))
         if not self.ROLE_ARN:
-            self.ROLE_ARN = config_section.get("adfs_role_arn", "")
+            self.ROLE_ARN = config_section.get("adfs_role_arn", default_section.get("adfs_role_arn", ""))
         if not self.DEFAULT_USERNAME:
-            self.DEFAULT_USERNAME = config_section.get("adfs_default_username", None)
+            self.DEFAULT_USERNAME = config_section.get("adfs_default_username", default_section.get("adfs_default_username", ""))
         if not self.DURATION:
-            conf_duration = config_section.get("adfs_session_duration", "")
+            conf_duration = config_section.get("adfs_session_duration", default_section.get("adfs_session_duration", ""))
             if conf_duration.isdigit():
                 self.DURATION = int(conf_duration) * 3600
         if not self.DURATION:
