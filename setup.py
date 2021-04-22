@@ -22,7 +22,7 @@ elif sys.version_info[0] == 3:
 
 setup(
     name="adfs-aws-login",
-    version="0.2.7",
+    version="0.2.8",
     description="CLI login to AWS using ADFS",
     long_description=long_description,
     long_description_content_type="text/markdown",
