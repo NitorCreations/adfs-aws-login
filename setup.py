@@ -1,11 +1,24 @@
 # coding=utf8
-from setuptools import setup
 import os
+import sys
+from setuptools import setup
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 with open("README.md") as f:
     long_description = f.read()
+
+if sys.version_info[0] == 2:
+    python2_or_3_deps = ['importlib-metadata==2.1.1', 'decorator==4.4.2']
+    python2_or_3_test_deps = ['pytest==4.6.11', 'pytest-mock==1.13.0', 'mock==3.0.5']
+elif sys.version_info[0] == 3:
+    python2_or_3_deps = []
+    python2_or_3_test_deps = ['pytest-mock', 'mock']
+    if sys.version_info[1] == 5:
+        python2_or_3_test_deps.insert(0, "pytest==6.1.2")
+        python2_or_3_test_deps.append('importlib-metadata==2.1.1')
+    else:
+        python2_or_3_test_deps.insert(0, "pytest")
 
 setup(
     name="adfs-aws-login",
@@ -30,15 +43,10 @@ setup(
         "threadlocal-aws==0.8",
         "beautifulsoup4>=4.8.1",
         "lxml",
-    ],
+    ] + python2_or_3_deps,
     tests_require=[
-        "pytest==4.6.5",
-        "pytest-mock==1.10.4",
-        "pytest-cov==2.7.1",
-        "requests-mock==1.6.0",
-        "pytest-runner",
-        "mock==3.0.5",
-        "cryptography==3.3.2",
-    ],
+        "requests-mock==1.8.0",
+        "pytest-cov==2.11.1",
+    ] + python2_or_3_test_deps,
     test_suite="tests",
 )
