@@ -40,7 +40,7 @@ setup(
     setup_requires=["pytest-runner"],
     install_requires=[
         "requests>=2.22.0",
-        "threadlocal-aws==0.10",
+        "threadlocal-aws>=0.10",
         "beautifulsoup4>=4.8.1",
         "lxml",
     ] + python2_or_3_deps,
