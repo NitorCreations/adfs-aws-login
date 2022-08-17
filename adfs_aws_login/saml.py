@@ -37,6 +37,9 @@ def get_saml_assertion(username, password, conf):
     # Opens the initial IdP url and follows all of the HTTP302 redirects, and
     # gets the resulting login page
     formresponse = session.get(conf.ADFS_LOGIN_URL, verify=True)
+    # Raise an error if this failed:
+    formresponse.raise_for_status()
+
     # Capture the idpauthformsubmiturl, which is the final url after all the 302s
     idpauthformsubmiturl = formresponse.url
 
@@ -75,6 +78,8 @@ def get_saml_assertion(username, password, conf):
 
     # Performs the submission of the IdP login form with the above post data
     response = session.post(idpauthformsubmiturl, data=payload, verify=True)
+    # Raise an error if this failed:
+    response.raise_for_status()
 
     # Overwrite and delete the credential variables, just for safety
     username = "##############################################"
