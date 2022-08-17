@@ -13,7 +13,12 @@ except NameError:
 
 
 def adfs_aws_login():
-    conf = init()
+    try:
+        conf = init()
+    except Exception as e:
+        print("failed to initialise config")
+        print(str(e))
+        sys.exit(1)
     username = None
     # Get the federated credentials from the user
     if not conf.NO_PROMPT:
@@ -32,7 +37,8 @@ def adfs_aws_login():
 
     try:
         assertion, awsroles = saml.get_saml_assertion(username, password, conf)
-    except saml.SamlException as e:
+    except Exception as e:
+        print("Exception calling get_saml_assertion:")
         print(e)
         sys.exit(1)
 
@@ -48,24 +54,34 @@ def adfs_aws_login():
                 role_arn = conf.ROLE_ARN
                 principal_arn = awsrole.split(",")[1]
         if not role_arn:
-           role_arn, principal_arn = select_role(awsroles)
+            role_arn, principal_arn = select_role(awsroles)
     else:
         # If I have more than one role, ask the user which one they want,
         # otherwise just proceed
-       role_arn, principal_arn = select_role(awsroles)
+        role_arn, principal_arn = select_role(awsroles)
 
     if not role_arn:
         print("No valid role found in assertions")
         print(awsroles)
         sys.exit(3)
     # Use the assertion to get an AWS STS token using Assume Role with SAML
-    token = sts().assume_role_with_saml(
-        RoleArn=role_arn,
-        PrincipalArn=principal_arn,
-        SAMLAssertion=assertion,
-        DurationSeconds=conf.DURATION,
-    )
-    credentials.write(token, conf.PROFILE)
+    try:
+        token = sts().assume_role_with_saml(
+            RoleArn=role_arn,
+            PrincipalArn=principal_arn,
+            SAMLAssertion=assertion,
+            DurationSeconds=conf.DURATION,
+        )
+    except Exception as e:
+        print("unable to assume role with saml")
+        print(str(e))
+        sys.exit(1)
+    try:
+        credentials.write(token, conf.PROFILE)
+    except Exception as e:
+        print("unable to write credentials")
+        print(str(e))
+        sys.exit(1)
 
 def select_role(awsroles):
     role_arn = None

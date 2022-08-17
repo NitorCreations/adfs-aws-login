@@ -3,7 +3,6 @@ from os.path import expanduser, join
 import sys
 import argparse
 import json
-import logging
 
 try:
     # For Python 3.5 and later
